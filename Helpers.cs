@@ -2,7 +2,7 @@
 {
     public static class Helpers
     {
-        public static Pair getPair(string pair)
+        public static Pair GetPair(string pair)
         {
             var arr = pair.Split('-');
             return new Pair

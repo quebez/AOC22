@@ -1,3 +1,5 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 namespace AOC22
 {
     public class Tests
@@ -110,8 +112,8 @@ namespace AOC22
             {
                 if (string.IsNullOrEmpty(i)) break;
                 var pair = i.Split(',');
-                var a = Helpers.getPair(pair[0]);
-                var b = Helpers.getPair(pair[1]);
+                var a = Helpers.GetPair(pair[0]);
+                var b = Helpers.GetPair(pair[1]);
 
                 if ((a.l >= b.l && a.h <= b.h) || (b.l >= a.l && b.h <= a.h)) containing++;
             }
@@ -126,12 +128,70 @@ namespace AOC22
             {
                 if (string.IsNullOrEmpty(i)) break;
                 var pair = i.Split(',');
-                var a = Helpers.getPair(pair[0]);
-                var b = Helpers.getPair(pair[1]);
+                var a = Helpers.GetPair(pair[0]);
+                var b = Helpers.GetPair(pair[1]);
 
                 if (b.l <= a.l && a.l <= b.h || a.l <= b.l && b.l <= a.h) overlaps++;
             }
             Console.WriteLine(overlaps);
+        }
+
+        // picovina
+        [Test]
+        public void D51()
+        {
+            var x = _.i5d.GetColumnsFromBottomUp();
+            var y = _.i5m.GetStrings().GetArrayOfInts();
+
+            foreach (var i in y)
+            {
+                var howMany = i[0];
+                x[i[2] - 1] += x[i[1] - 1].Substring(x[i[1] - 1].Length - howMany, howMany).Reverse();
+                x[i[1] - 1] = x[i[1] - 1][..^howMany];
+            }
+            
+            foreach (var i in x)
+            {
+                Console.Write(i[^1]);
+            }
+        }
+
+        [Test]
+        public void D52()
+        {
+            var x = _.i5d.GetColumnsFromBottomUp();
+            var y = _.i5m.GetStrings().GetArrayOfInts();
+
+            foreach (var i in y)
+            {
+                var howMany = i[0];
+                x[i[2] - 1] += x[i[1] - 1].Substring(x[i[1] - 1].Length - howMany, howMany);
+                x[i[1] - 1] = x[i[1] - 1][..^howMany];
+            }
+
+            foreach (var i in x)
+            {
+                Console.Write(i[^1]);
+            }
+        }
+
+        
+        [Test]
+        [TestCase(4)]
+        [TestCase(14)]
+        public void D612(int c)
+        {
+            var str = _.i6.ToArray();
+            var arr = new char[c];
+            for (var i = 0; i < str.Length - c; i++)
+            {
+                Array.Copy(str, i, arr, 0, c);
+                if (arr.Distinct().Count() == c)
+                {
+                    Console.WriteLine(i + c);
+                    break;
+                }
+            }
         }
 
         [Test]
