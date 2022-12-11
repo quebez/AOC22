@@ -195,6 +195,32 @@ namespace AOC22
         }
 
         [Test]
+        public void D71()
+        {
+            var allItems = Helpers.GetItems(_.i7);
+            var total = 0;
+            foreach (var item in allItems)
+            {
+                if (item.Children.Count > 0 && item.Size < 100000) total += item.Size;
+            }
+            Console.WriteLine(total);
+        }
+
+        [Test]
+        public void D72()
+        {
+            var allItems = Helpers.GetItems(_.i7);
+            var freeSpace = 70000000 - allItems[0].Size;
+            var spaceRequired = 30000000 - freeSpace;
+            var res = allItems[0].Size;
+            foreach (var item in allItems)
+            {
+                if (item.Children.Count > 0 && item.Size < res && item.Size > spaceRequired) res = item.Size;
+            }
+            Console.WriteLine(res);
+        }
+
+        [Test]
         public void D()
         {
 
