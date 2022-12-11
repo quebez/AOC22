@@ -175,7 +175,6 @@ namespace AOC22
             }
         }
 
-        
         [Test]
         [TestCase(4)]
         [TestCase(14)]
@@ -218,6 +217,48 @@ namespace AOC22
                 if (item.Children.Count > 0 && item.Size < res && item.Size > spaceRequired) res = item.Size;
             }
             Console.WriteLine(res);
+        }
+
+        [Test]
+        public void D81()
+        {
+            var grid = _.i8.GetStrings().ToArray();
+            var visibleCount = grid.Count() * 2 + grid[0].Length * 2 - 4;
+
+            for (var i = 1; i < grid.Length - 1; i++)
+                for (var j = 1; j < grid[i].Length - 1; j++)
+                {
+                    if (!Helpers.IsAnyHigher(grid, i, j, Helpers.FromSide.LEFT) ||
+                        !Helpers.IsAnyHigher(grid, i, j, Helpers.FromSide.RIGHT) ||
+                        !Helpers.IsAnyHigher(grid, i, j, Helpers.FromSide.TOP) ||
+                        !Helpers.IsAnyHigher(grid, i, j, Helpers.FromSide.BOTTOM)) visibleCount++;
+                }
+
+            Console.WriteLine(visibleCount);
+        }
+
+        [Test]
+        public void D82()
+        {
+            var grid = _.i8.GetStrings().ToArray();
+            var max = 0;
+
+            for (var i = 1; i < grid.Length - 1; i++)
+                for (var j = 1; j < grid[i].Length - 1; j++)
+                {
+                    var score = Helpers.GetTreeScore(grid, i, j, Helpers.FromSide.LEFT) *
+                                Helpers.GetTreeScore(grid, i, j, Helpers.FromSide.RIGHT) *
+                                Helpers.GetTreeScore(grid, i, j, Helpers.FromSide.TOP) *
+                                Helpers.GetTreeScore(grid, i, j, Helpers.FromSide.BOTTOM);
+                    if (score > max) max = score;
+                }
+            Console.WriteLine(max);
+        }
+
+        [Test]
+        public void D111()
+        {
+
         }
 
         [Test]

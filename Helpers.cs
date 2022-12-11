@@ -2,6 +2,8 @@
 {
     public static class Helpers
     {
+        public enum FromSide { TOP, BOTTOM, LEFT, RIGHT };
+
         public static Pair GetPair(string pair)
         {
             var arr = pair.Split('-');
@@ -50,6 +52,60 @@
             }
             root.SetSize();
             return allItems;
+        }
+
+        public static bool IsAnyHigher(string[] els, int rowI, int colI, FromSide side)
+        {
+            switch (side)
+            {
+                case FromSide.TOP:
+                    for (int i = 0; i < rowI; i++) 
+                        if (els[i][colI] >= els[rowI][colI]) return true;
+                    break;
+                case FromSide.BOTTOM:
+                    for (int i = els.Count() - 1; i > rowI; i--) 
+                        if (els[i][colI] >= els[rowI][colI]) return true;
+                    break;
+                case FromSide.LEFT:
+                    for (int i = 0; i < colI; i++)
+                        if (els[rowI][i] >= els[rowI][colI]) return true;
+                    break;
+                case FromSide.RIGHT:
+                    for (int i = els[rowI].Length - 1; i > colI; i--)
+                        if (els[rowI][i] >= els[rowI][colI]) return true;
+                    break;
+            }
+            return false;
+        }
+
+        public static int GetTreeScore(string[] els, int rowI, int colI, FromSide side)
+        {
+            int score = 0;
+
+            switch (side)
+            {
+                case FromSide.TOP:
+                    for (int i = rowI - 1; i >= 0; i--)
+                        if (els[i][colI] < els[rowI][colI]) ++score;
+                        else if (els[i][colI] >= els[rowI][colI]) return ++score;
+                    break;
+                case FromSide.BOTTOM:
+                    for (int i = rowI + 1; i < els.Count(); i++)
+                        if (els[i][colI] < els[rowI][colI]) ++score;
+                        else if (els[i][colI] >= els[rowI][colI]) return ++score;
+                    break;
+                case FromSide.LEFT:
+                    for (int i = colI - 1; i >= 0; i--)
+                        if (els[rowI][i] < els[rowI][colI]) ++score;
+                        else if (els[rowI][i] >= els[rowI][colI]) return ++score;
+                    break;
+                case FromSide.RIGHT:
+                    for (int i = colI + 1; i < els[rowI].Length; i++)
+                        if (els[rowI][i] < els[rowI][colI]) ++score;
+                        else if (els[rowI][i] >= els[rowI][colI]) return ++score;
+                    break;
+            }
+            return score;
         }
     }
 
