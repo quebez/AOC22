@@ -2,16 +2,12 @@
 {
     public static class Helpers
     {
-        public enum FromSide { TOP, BOTTOM, LEFT, RIGHT };
+        public enum Side { TOP, BOTTOM, LEFT, RIGHT };
 
         public static Pair GetPair(string pair)
         {
             var arr = pair.Split('-');
-            return new Pair
-            {
-                l = int.Parse(arr[0]),
-                h = int.Parse(arr[1])
-            };
+            return new Pair(int.Parse(arr[0]), int.Parse(arr[1]));
         }
 
         public static List<Item> GetItems(string x)
@@ -54,23 +50,23 @@
             return allItems;
         }
 
-        public static bool IsAnyHigher(string[] els, int rowI, int colI, FromSide side)
+        public static bool IsAnyHigher(string[] els, int rowI, int colI, Side fromSide)
         {
-            switch (side)
+            switch (fromSide)
             {
-                case FromSide.TOP:
+                case Side.TOP:
                     for (int i = 0; i < rowI; i++) 
                         if (els[i][colI] >= els[rowI][colI]) return true;
                     break;
-                case FromSide.BOTTOM:
+                case Side.BOTTOM:
                     for (int i = els.Count() - 1; i > rowI; i--) 
                         if (els[i][colI] >= els[rowI][colI]) return true;
                     break;
-                case FromSide.LEFT:
+                case Side.LEFT:
                     for (int i = 0; i < colI; i++)
                         if (els[rowI][i] >= els[rowI][colI]) return true;
                     break;
-                case FromSide.RIGHT:
+                case Side.RIGHT:
                     for (int i = els[rowI].Length - 1; i > colI; i--)
                         if (els[rowI][i] >= els[rowI][colI]) return true;
                     break;
@@ -78,28 +74,28 @@
             return false;
         }
 
-        public static int GetTreeScore(string[] els, int rowI, int colI, FromSide side)
+        public static int GetTreeScore(string[] els, int rowI, int colI, Side fromSide)
         {
             int score = 0;
 
-            switch (side)
+            switch (fromSide)
             {
-                case FromSide.TOP:
+                case Side.TOP:
                     for (int i = rowI - 1; i >= 0; i--)
                         if (els[i][colI] < els[rowI][colI]) ++score;
                         else if (els[i][colI] >= els[rowI][colI]) return ++score;
                     break;
-                case FromSide.BOTTOM:
+                case Side.BOTTOM:
                     for (int i = rowI + 1; i < els.Count(); i++)
                         if (els[i][colI] < els[rowI][colI]) ++score;
                         else if (els[i][colI] >= els[rowI][colI]) return ++score;
                     break;
-                case FromSide.LEFT:
+                case Side.LEFT:
                     for (int i = colI - 1; i >= 0; i--)
                         if (els[rowI][i] < els[rowI][colI]) ++score;
                         else if (els[rowI][i] >= els[rowI][colI]) return ++score;
                     break;
-                case FromSide.RIGHT:
+                case Side.RIGHT:
                     for (int i = colI + 1; i < els[rowI].Length; i++)
                         if (els[rowI][i] < els[rowI][colI]) ++score;
                         else if (els[rowI][i] >= els[rowI][colI]) return ++score;
@@ -107,12 +103,41 @@
             }
             return score;
         }
+
+        public static void SetNextPositions(Pair head, Pair tail, char direction)
+        {
+            switch (direction)
+            {
+                case 'R':
+                    if (head.x - 1 == tail.x) tail.Assign(head);
+                    head.x++;
+                    break;
+                case 'L':
+                    if (head.x + 1 == tail.x) tail.Assign(head);
+                    head.x--;
+                    break;
+                case 'U':
+                    if (head.y - 1 == tail.y) tail.Assign(head);
+                    head.y++;
+                    break;
+                case 'D':
+                    if (head.y + 1 == tail.y) tail.Assign(head);
+                    head.y--;
+                    break;
+            }
+        }
     }
 
     public class Pair
     {
-        public int l;
-        public int h;
+        public Pair(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+
+        public int x;
+        public int y;
     }
 
     public class Item

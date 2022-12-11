@@ -45,6 +45,10 @@ namespace AOC22
             return new string(charArray);
         }
 
-
+        public static void Assign(this Pair a, Pair b)
+        {
+            a.x = b.x;
+            a.y = b.y;
+        }
     }
 }

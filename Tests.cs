@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.ComponentModel;
 
 namespace AOC22
 {
@@ -115,7 +116,7 @@ namespace AOC22
                 var a = Helpers.GetPair(pair[0]);
                 var b = Helpers.GetPair(pair[1]);
 
-                if ((a.l >= b.l && a.h <= b.h) || (b.l >= a.l && b.h <= a.h)) containing++;
+                if ((a.x >= b.x && a.y <= b.y) || (b.x >= a.x && b.y <= a.y)) containing++;
             }
             Console.WriteLine(containing);
         }
@@ -131,7 +132,7 @@ namespace AOC22
                 var a = Helpers.GetPair(pair[0]);
                 var b = Helpers.GetPair(pair[1]);
 
-                if (b.l <= a.l && a.l <= b.h || a.l <= b.l && b.l <= a.h) overlaps++;
+                if (b.x <= a.x && a.x <= b.y || a.x <= b.x && b.x <= a.y) overlaps++;
             }
             Console.WriteLine(overlaps);
         }
@@ -228,10 +229,10 @@ namespace AOC22
             for (var i = 1; i < grid.Length - 1; i++)
                 for (var j = 1; j < grid[i].Length - 1; j++)
                 {
-                    if (!Helpers.IsAnyHigher(grid, i, j, Helpers.FromSide.LEFT) ||
-                        !Helpers.IsAnyHigher(grid, i, j, Helpers.FromSide.RIGHT) ||
-                        !Helpers.IsAnyHigher(grid, i, j, Helpers.FromSide.TOP) ||
-                        !Helpers.IsAnyHigher(grid, i, j, Helpers.FromSide.BOTTOM)) visibleCount++;
+                    if (!Helpers.IsAnyHigher(grid, i, j, Helpers.Side.LEFT) ||
+                        !Helpers.IsAnyHigher(grid, i, j, Helpers.Side.RIGHT) ||
+                        !Helpers.IsAnyHigher(grid, i, j, Helpers.Side.TOP) ||
+                        !Helpers.IsAnyHigher(grid, i, j, Helpers.Side.BOTTOM)) visibleCount++;
                 }
 
             Console.WriteLine(visibleCount);
@@ -246,20 +247,39 @@ namespace AOC22
             for (var i = 1; i < grid.Length - 1; i++)
                 for (var j = 1; j < grid[i].Length - 1; j++)
                 {
-                    var score = Helpers.GetTreeScore(grid, i, j, Helpers.FromSide.LEFT) *
-                                Helpers.GetTreeScore(grid, i, j, Helpers.FromSide.RIGHT) *
-                                Helpers.GetTreeScore(grid, i, j, Helpers.FromSide.TOP) *
-                                Helpers.GetTreeScore(grid, i, j, Helpers.FromSide.BOTTOM);
+                    var score = Helpers.GetTreeScore(grid, i, j, Helpers.Side.LEFT) *
+                                Helpers.GetTreeScore(grid, i, j, Helpers.Side.RIGHT) *
+                                Helpers.GetTreeScore(grid, i, j, Helpers.Side.TOP) *
+                                Helpers.GetTreeScore(grid, i, j, Helpers.Side.BOTTOM);
                     if (score > max) max = score;
                 }
             Console.WriteLine(max);
         }
 
         [Test]
-        public void D111()
+        public void D91()
         {
+            var head = new Pair(0, 0);
+            var tail = new Pair(0, 0);
+            var visited = new List<string>();
 
+            foreach (var row in _.i9.GetStrings())
+            {
+                if (string.IsNullOrEmpty(row)) break;
+
+                var a = row.Split(' ');
+                for (var i = 0; i < int.Parse(a[1]); i++)
+                {
+                    visited.Add($"{tail.x},{tail.y}");
+                    Helpers.SetNextPositions(head, tail, char.Parse(a[0]));
+                }
+            }
+            visited.Add($"{tail.x},{tail.y}");
+            Console.WriteLine(visited.Distinct().Count());
         }
+
+        [Test]
+        public void D92() { }
 
         [Test]
         public void D()
